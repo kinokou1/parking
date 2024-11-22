@@ -1,10 +1,19 @@
-// src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import exitIcon from '../exit.png'; 
 
 const Navbar = () => {
+    const handleExit = () => {
+        alert('已退出');
+    };
+
     return (
-        <nav>
+        <nav className="navbar">
+            <div className="navbar-header">
+                <button className="exit-button" onClick={handleExit}>
+                    <img src={exitIcon} alt="退出" />
+                </button>
+            </div>
             <ul>
                 <li><Link to="/">车库管理</Link></li>
                 <li><Link to="/operators">操作员管理</Link></li>
