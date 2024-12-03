@@ -1,10 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import exitIcon from '../exit.png'; 
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
+    const navigate = useNavigate();
+
+    // 退出登录功能
     const handleExit = () => {
-        alert('已退出');
+        // 清除登录状态
+        alert("已退出");
+        onLogin(false);
+        
+        // 跳转到登录页面
+        navigate('/login');
     };
 
     return (
