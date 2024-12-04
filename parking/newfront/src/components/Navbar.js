@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import exitIcon from '../exit.png'; 
 
-const Navbar = ({ onLogout }) => {
+const Navbar = ({ onLogin }) => {
     const navigate = useNavigate();
 
     // 退出登录功能

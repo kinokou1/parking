@@ -20,7 +20,7 @@ const App = () => {
     return (
         <Router>
             <div>
-                <Navbar onLogout={handleLogin} />
+                <Navbar onLogin={handleLogin} />
                 <Routes>
                     {/* 如果已登录，则可以访问主页面 */}
                     <Route
