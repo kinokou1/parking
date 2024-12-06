@@ -5,7 +5,12 @@ const ParkingCard = () => {
     const [cards, setCards] = useState([]);
     const [cardType, setCardType] = useState('临时卡');
     const [balance, setBalance] = useState(0);
-    const [searchCardId, setSearchCardId] = useState(''); // 查询卡号
+    const [searchCardId, setSearchCardId] = useState('');
+    const [showEditPopup, setShowEditPopup] = useState(false); // 控制编辑弹窗
+    const [editCard, setEditCard] = useState(null); // 当前编辑的停车卡信息
+
+    const [currentPage, setCurrentPage] = useState(1); // 当前页
+    const [itemsPerPage] = useState(20); // 每页显示条数
 
     useEffect(() => {
         fetchParkingCards();
@@ -34,7 +39,7 @@ const ParkingCard = () => {
         }
     };
 
-    // 根据卡号删除停车卡
+    // 删除停车卡
     const deleteParkingCard = async (cardId) => {
         const confirmDelete = window.confirm(`确定删除卡号 ${cardId} 吗？`);
         if (confirmDelete) {
@@ -43,16 +48,53 @@ const ParkingCard = () => {
         }
     };
 
+    // 打开编辑弹窗
+    const openEditPopup = (card) => {
+        setEditCard(card); // 设置当前编辑的停车卡
+        setShowEditPopup(true); // 显示弹窗
+    };
+
+    // 关闭编辑弹窗
+    const closeEditPopup = () => {
+        setShowEditPopup(false); // 关闭弹窗
+        setEditCard(null); // 清空编辑信息
+    };
+
+    // 修改停车卡
+    const updateParkingCard = async () => {
+        if (!editCard.card_id) {
+            alert('卡号不能为空！');
+            return;
+        }
+        await api.updateParkingCard(editCard); // 调用更新接口
+        fetchParkingCards(); // 刷新数据
+        closeEditPopup(); // 关闭弹窗
+    };
+
+    // 分页逻辑
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentData = cards.slice(indexOfFirstItem, indexOfLastItem); // 当前页数据
+    const totalPages = Math.ceil(cards.length / itemsPerPage); // 总页数
+
+    const nextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
         <div className="container">
             <h2>停车卡管理</h2>
+            {/* 添加停车卡模块 */}
             <div className="card">
                 <h3>添加停车卡</h3>
                 <div>
                     <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
                         <option value="临时卡">临时卡</option>
                         <option value="月租卡">月租卡</option>
-                        <option value="储值卡">储值卡</option>
                         <option value="特种免费卡">特种免费卡</option>
                     </select>
                     <input
@@ -65,6 +107,8 @@ const ParkingCard = () => {
                     <button onClick={addParkingCard}>添加停车卡</button>
                 </div>
             </div>
+
+            {/* 查询停车卡模块 */}
             <div className="card">
                 <h3>查询停车卡</h3>
                 <div>
@@ -78,22 +122,90 @@ const ParkingCard = () => {
                     <button onClick={fetchParkingCards}>重置</button>
                 </div>
             </div>
+
+            {/* 停车卡列表模块 */}
             <div className="card">
                 <h3>停车卡列表</h3>
-                <ul>
-                    {cards.map((card) => (
-                        <li key={card.card_id}>
-                            卡号：{card.card_id}，类型：{card.card_type}，余额：{card.balance}元
-                            <button
-                                className="delete-btn"
-                                onClick={() => deleteParkingCard(card.card_id)}
-                            >
-                                删除
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <p>总数据条数：{cards.length}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>卡号</th>
+                            <th>类型</th>
+                            <th>余额</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentData.map((card) => (
+                            <tr key={card.card_id}>
+                                <td>{card.card_id}</td>
+                                <td>{card.card_type}</td>
+                                <td>{card.balance}</td>
+                                <td>
+                                    <button onClick={() => openEditPopup(card)}>修改</button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => deleteParkingCard(card.card_id)}
+                                    >
+                                        删除
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="pagination">
+                    <button onClick={prevPage} disabled={currentPage === 1}>
+                        上一页
+                    </button>
+                    <span>
+                        第 {currentPage} 页 / 共 {totalPages} 页
+                    </span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages}>
+                        下一页
+                    </button>
+                </div>
             </div>
+
+            {/* 编辑弹窗 */}
+            {showEditPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>修改停车卡</h3>
+                        <input
+                            type="text"
+                            placeholder="卡号"
+                            value={editCard.card_id}
+                            onChange={(e) =>
+                                setEditCard({ ...editCard, card_id: e.target.value })
+                            }
+                            disabled
+                        />
+                        <select
+                            value={editCard.card_type}
+                            onChange={(e) =>
+                                setEditCard({ ...editCard, card_type: e.target.value })
+                            }
+                        >
+                            <option value="临时卡">临时卡</option>
+                            <option value="月租卡">月租卡</option>
+                            <option value="特种免费卡">特种免费卡</option>
+                        </select>
+                        <input
+                            type="number"
+                            placeholder="余额"
+                            value={editCard.balance}
+                            onChange={(e) =>
+                                setEditCard({ ...editCard, balance: Number(e.target.value) })
+                            }
+                            min="0"
+                        />
+                        <button onClick={updateParkingCard}>提交</button>
+                        <button onClick={closeEditPopup}>取消</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

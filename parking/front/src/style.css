@@ -5,6 +5,11 @@ body, html {
     height: 100%; /* 使 body 和 html 占满屏幕 */
     display: flex;
     flex-direction: column;
+    background: 
+    linear-gradient(-180deg, #BCC5CE 0%, #929EAD 98%),
+    radial-gradient(at top left, rgba(255,255,255,0.30) 0%, rgba(0,0,0,0.30) 100%);
+    background-blend-mode: screen;
+    background-attachment: fixed;
 }
 
 /* 登录页面样式 */
@@ -12,9 +17,11 @@ body, html {
     max-width: 400px;
     margin: 100px auto;
     padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
     background-color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   
     text-align: center;
 }
 
@@ -40,15 +47,62 @@ body, html {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .login-form button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #007bff, #00bcd4);
+    transition: all 0.3s ease;
 }
 
 .error-message {
     color: #d9534f;
     font-size: 14px;
+}
+
+/* 弹窗样式 */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 300px;
+    width: 90%; /* 响应式宽度 */
+    min-width: 180px; /* 最小宽度 */
+}
+
+.popup-content h3 {
+    margin-bottom: 10px;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
 }
 
 /* 左侧固定导航栏布局 */
@@ -60,29 +114,35 @@ body, html {
 /* 导航栏样式 */
 .navbar {
     width: 150px; /* 固定宽度 */
-    background-color: #3a3a3a;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
     color: white;
     height: 100vh; /* 高度占满视口 */
     position: fixed; /* 固定位置 */
     top: 0;
     left: 0;
     z-index: 3;
+    transition: all 0.3s ease;
 }
 
 .navbar-header {
     position: absolute;
     width: 150px;
     height: 50px;
-    background-color: #007bff; 
+    background-color: #a1ceff; 
     z-index: 3; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 /* 按钮样式 */
 .exit-button {
-    background: none;
+    background-color: #a1ceff; 
     border: none;
     padding: 0;
+    border-radius: 21px;
     cursor: pointer;
+    z-index: 10;
 }
 
 /* 图片样式 */
@@ -113,13 +173,74 @@ body, html {
 }
 
 .navbar ul li a:hover {
-    background-color: #575757;
+    background: linear-gradient(135deg, #007bff, #00bcd4);
     border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar:hover .navbar-header{
+    width: 180px;
+    transition: width 0.3s ease; /* 动效：鼠标悬停时导航栏宽度增加 */
+}
+
+.navbar:hover{
+    width: 180px;
+    transition: width 0.3s ease; /* 动效：鼠标悬停时导航栏宽度增加 */
+}
+
+/* 弹窗样式 */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 300px;
+    width: 90%; /* 响应式宽度 */
+    min-width: 180px; /* 最小宽度 */
+    color:black;
+}
+
+.popup-content h3 {
+    margin-bottom: 10px;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
 }
 
 /* 主内容区域样式 */
 .content {
     margin-left: 150px; /* 为导航栏留出空间 */
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   
     padding: 20px;
     width: calc(100% - 250px); /* 减去导航栏宽度 */
 }
@@ -135,17 +256,22 @@ body, html {
 main {
     flex: 1;  /* 使 main 占据剩余空间 */
     width: 1200px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   
     margin: 20px;
     padding: 20px;
-    background: white;
+
 }
 
 /* 页头 */
 header {
-    background-color: #007bff;
+    background-color: #a1ceff;
     color: white;
     padding: 10px 0;
     text-align: center;
+    -webkit-text-stroke: 1px #32003C;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 2;
 }
@@ -219,7 +345,6 @@ main {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
 /* 表格样式 */
 table {
     width: 100%;
@@ -247,6 +372,34 @@ table tr:hover {
     background-color: #f1f1f1;
 }
 
+/* 分页按钮样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    margin: 0 10px;
+}
+
 /* 按钮样式 */
 button {
     padding: 8px 16px;
@@ -267,6 +420,7 @@ button:not(.delete-btn):hover {
 }
 
 button.delete-btn {
+    margin-left: 10px;
     background-color: #d9534f;
     color: white;
 }
@@ -305,9 +459,4 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-}
-
-.form-container input, .form-container select, .form-container button {
-    display: block;
-    width: 100%;
 }

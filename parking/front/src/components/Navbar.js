@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import exitIcon from '../exit.png'; 
 
-const Navbar = ({ onLogout }) => {
+const Navbar = ({ onLogin }) => {
+    const [showExitPopup, setShowExitPopup] = useState(false); // 控制退出弹窗显示
     const navigate = useNavigate();
 
-    // 退出登录功能
     const handleExit = () => {
-        // 清除登录状态
-        alert("已退出");
-        onLogin(false);
-        
-        // 跳转到登录页面
-        navigate('/login');
+        setShowExitPopup(true); // 显示退出弹窗
+    };
+
+    const closePopupAndRedirect = () => {
+        setShowExitPopup(false); // 关闭退出弹窗
+        onLogin(false); // 清除登录状态
+        navigate('/login'); // 跳转到登录页面
     };
 
     return (
@@ -30,6 +31,16 @@ const Navbar = ({ onLogout }) => {
                 <li><Link to="/vehicle-exit">车辆出库</Link></li>
                 <li><Link to="/parking-records">停车记录</Link></li>
             </ul>
+                {/* 退出成功弹窗 */}
+                {showExitPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>已退出</h3>
+                        <p>您已成功退出登录。</p>
+                        <button onClick={closePopupAndRedirect}>确定</button>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };

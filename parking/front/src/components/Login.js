@@ -1,38 +1,48 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api'; // 引入api模块来验证操作员
 
 const Login = ({ onLogin }) => {
     const [operatorId, setOperatorId] = useState('');
     const [name, setName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false); // 控制成功弹窗显示
+    const navigate = useNavigate(); // 跳转功能
 
     const handleLogin = async () => {
-        // 验证用户输入是否为空
         if (!operatorId || !name) {
             setErrorMessage('工号和姓名不能为空');
             return;
         }
+        if (operatorId === "1000" && name === "admin") { 
+            // 调试入口：工号1000，姓名admin
+            setErrorMessage('');
+            setShowSuccessPopup(true); // 显示成功弹窗
+            onLogin(true); // 更新登录状态
+        } else {
+            try {
+                // 获取所有操作员数据
+                const operators = await api.getOperators();
 
-        try {
-            // 调用后端 API 验证操作员
-            const isValid = await api.validateOperator({ id: operatorId, name });
-            if (isValid) {
-                // 登录成功，设置状态并跳转到首页
-                onLogin(true);
-                alert("登录成功，现在可以使用所有功能了");
-                setErrorMessage('');
-            } else if(operatorId == "1000" && name == "admin"){ 
-                 // 调试入口：工号1000，姓名admin
-                onLogin(true);
-                alert("登录成功，现在可以使用所有功能了");
-                setErrorMessage('');
-                }else{
-                // 验证失败，显示错误信息
-                setErrorMessage('工号或姓名不正确');
+                // 查找是否有匹配的操作员
+                const operator = operators.find(op => op.id === operatorId && op.name === name);
+
+                if (operator) {
+                    setErrorMessage('');
+                    setShowSuccessPopup(true); // 显示成功弹窗
+                    onLogin(true); // 更新登录状态
+                } else {
+                    setErrorMessage('工号或姓名不正确');
+                }
+            } catch (error) {
+                setErrorMessage('登录失败，请稍后重试');
             }
-        } catch (error) {
-            setErrorMessage('登录失败，请稍后重试');
         }
+    };
+
+    const closePopupAndRedirect = () => {
+        setShowSuccessPopup(false); // 关闭弹窗
+        navigate('/'); // 跳转到首页
     };
 
     return (
@@ -54,6 +64,17 @@ const Login = ({ onLogin }) => {
                 <button onClick={handleLogin}>登录</button>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
+
+            {/* 登录成功弹窗 */}
+            {showSuccessPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>登录成功</h3>
+                        <p>现在可以使用所有功能了。</p>
+                        <button onClick={closePopupAndRedirect}>确定</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

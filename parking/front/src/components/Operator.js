@@ -8,7 +8,9 @@ const Operator = () => {
     const [sex, setGender] = useState('男');
     const [age, setAge] = useState(18);
     const [searchTerm, setSearchTerm] = useState(''); // 查询关键词
-
+    const [showEditPopup, setShowEditPopup] = useState(false); // 控制编辑弹窗显示
+    const [editOperator, setEditOperator] = useState(null); // 当前正在编辑的操作员信息
+    
     useEffect(() => {
         fetchOperators();
     }, []);
@@ -54,6 +56,42 @@ const Operator = () => {
             await api.deleteOperator(operatorId);
             fetchOperators();
         }
+    };
+
+    const openEditPopup = (operator) => {
+        setEditOperator(operator); // 设置当前要编辑的操作员信息
+        setShowEditPopup(true); // 显示弹窗
+    };
+
+    const closeEditPopup = () => {
+        setShowEditPopup(false); // 关闭弹窗
+        setEditOperator(null); // 清空编辑信息
+    };
+
+    const updateOperator = async () => {
+        if (!editOperator.id || !editOperator.name) {
+            alert('工号和姓名不能为空！');
+            return;
+        }
+        await api.updateOperator(editOperator); // 调用更新接口
+        fetchOperators(); // 刷新数据
+        closeEditPopup(); // 关闭弹窗
+    };
+
+    // 分页逻辑
+    const [currentPage, setCurrentPage] = useState(1); // 当前页码
+    const [itemsPerPage] = useState(20); // 每页显示条目数
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentData = operators.slice(indexOfFirstItem, indexOfLastItem); // 当前页数据
+    const totalPages = Math.ceil(operators.length / itemsPerPage); // 总页数
+
+    const nextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
     return (
@@ -112,20 +150,101 @@ const Operator = () => {
             {/* 操作员列表模块 */}
             <div className="card">
                 <h3>操作员列表</h3>
-                <ul>
-                    {operators.map((op) => (
-                        <li key={op.id}>
-                            工号：{op.id}，姓名：{op.name}，性别：{op.sex}，年龄：{op.age}
-                            <button
-                                className="delete-btn"
-                                onClick={() => deleteOperator(op.id)}
-                            >
-                                删除
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <p>总数据条数：{operators.length}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>工号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>年龄</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentData.map((op) => (
+                            <tr key={op.id}>
+                                <td>{op.id}</td>
+                                <td>{op.name}</td>
+                                <td>{op.sex}</td>
+                                <td>{op.age}</td>
+                                <td>
+                                    <button
+                                        onClick={() => openEditPopup(op)}
+                                    >
+                                        修改
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => deleteOperator(op.id)}
+                                    >
+                                        删除
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {/* 分页控件 */}
+                <div className="pagination">
+                    <button onClick={prevPage} disabled={currentPage === 1}>
+                        上一页
+                    </button>
+                    <span>
+                        第 {currentPage} 页 / 共 {totalPages} 页
+                    </span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages}>
+                        下一页
+                    </button>
+                </div>
             </div>
+
+            {/* 编辑弹窗 */}
+            {showEditPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>修改操作员</h3>
+                        <input
+                            type="text"
+                            placeholder="工号"
+                            value={editOperator.id}
+                            onChange={(e) =>
+                                setEditOperator({ ...editOperator, id: e.target.value })
+                            }
+                            disabled
+                        />
+                        <input
+                            type="text"
+                            placeholder="姓名"
+                            value={editOperator.name}
+                            onChange={(e) =>
+                                setEditOperator({ ...editOperator, name: e.target.value })
+                            }
+                        />
+                        <select
+                            value={editOperator.sex}
+                            onChange={(e) =>
+                                setEditOperator({ ...editOperator, sex: e.target.value })
+                            }
+                        >
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                        <input
+                            type="number"
+                            placeholder="年龄"
+                            value={editOperator.age}
+                            onChange={(e) =>
+                                setEditOperator({ ...editOperator, age: Number(e.target.value) })
+                            }
+                            min="18"
+                            max="65"
+                        />
+                        <button onClick={updateOperator}>提交</button>
+                        <button onClick={closeEditPopup}>取消</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
