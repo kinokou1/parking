@@ -67,7 +67,14 @@ const api = {
     createParkingRecord:async (recordData) => {
         const response = await axios.post(`/record/insert`,recordData);
         return response.data;
-}
+    },
+    // 删除库内车辆
+    deleteVehicle: async (vehicle_no) => {
+        const response = await axios.delete(`/vehicle/delete`, {
+            data: { vehicle_no: vehicle_no }
+        });
+        return response.data;
+    },
 };
 
 export default api;
