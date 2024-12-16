@@ -40,7 +40,7 @@ const api = {
     // 删除停车卡
     deleteParkingCard: async (cardId) => {
         const response = await axios.delete(`/parkingcard/delete`, {
-            data: { id: cardId }
+            data: { card_id: cardId }
         });
         return response.data;
     },
@@ -64,6 +64,10 @@ const api = {
         const response = await axios.get(`/record/findAll`);
         return response.data;
     },
+    createParkingRecord:async (recordData) => {
+        const response = await axios.post(`/record/insert`,recordData);
+        return response.data;
+}
 };
 
 export default api;

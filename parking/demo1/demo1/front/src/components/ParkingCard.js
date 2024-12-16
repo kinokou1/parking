@@ -42,8 +42,10 @@ const ParkingCard = () => {
     // 删除停车卡
     const deleteParkingCard = async (cardId) => {
         const confirmDelete = window.confirm(`确定删除卡号 ${cardId} 吗？`);
+
         if (confirmDelete) {
             await api.deleteParkingCard(cardId);
+            console.log("删除成功！")
             fetchParkingCards();
         }
     };
