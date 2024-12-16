@@ -1,0 +1,269 @@
+/* ȫ����ʽ */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* ʹ body �� html ռ����Ļ */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ���̶����������� */
+.layout {
+    display: flex;
+    min-height: 100vh; /* ҳ��߶����ٵ����ӿڸ߶� */
+}
+
+/* ��������ʽ */
+.navbar {
+    width: 150px; /* �̶���� */
+    background-color: #3a3a3a;
+    color: white;
+    height: 100vh; /* �߶�ռ���ӿ� */
+    position: fixed; /* �̶�λ�� */
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.navbar-header {
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    background-color: #007bff; 
+    z-index: 3; 
+}
+
+/* ��ť��ʽ */
+.exit-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* ͼƬ��ʽ */
+.exit-button img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain; /* ȷ��ͼƬ����ԭ���� */
+    display: block;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding-top: 50px;
+    padding-left: 0;
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 10px 0;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    background-color: #575757;
+    border-radius: 4px;
+}
+
+/* ������������ʽ */
+.content {
+    margin-left: 150px; /* Ϊ�����������ռ� */
+    padding: 20px;
+    width: calc(100% - 250px); /* ��ȥ��������� */
+}
+
+/* �ⲿ���� */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ʹ wrapper �߶����ٵ����ӿڸ߶� */
+}
+
+/* ���������� */
+main {
+    flex: 1;  /* ʹ main ռ��ʣ��ռ� */
+    width: 1200px;
+    margin: 20px;
+    padding: 20px;
+    background: white;
+}
+
+/* ҳͷ */
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+/* ҳ�� */
+footer {
+    text-align: center;
+    background-color: #3a3a3a;
+    color: white;
+    padding: 10px;
+    bottom: 0;      
+    width: 100%;       
+    z-index: 2;
+}
+
+/* ��������ʽ */
+.container {
+    margin: 20px;
+    padding: 20px;
+    max-width: 800px;
+}
+
+/* ��Ƭ��ʽ */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+/* ���������ʽ */
+.card input, .card select, .card button {
+    margin: 10px 0;
+}
+
+/* �б���ʽ */
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.card ul li:last-child {
+    border-bottom: none;
+}
+
+/* ������ʽ */
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* �����ʽ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* ��ť��ʽ */
+button {
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:not(.delete-btn) {
+    background-color: #007bff;
+    color: white;
+}
+
+button:not(.delete-btn):hover {
+    background-color: #0056b3;
+}
+
+button.delete-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+button.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* �������ʽ */
+input[type="text"], input[type="number"], select {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 24px);
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+/* ������ */
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-container label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-container input, .form-container select, .form-container button {
+    display: block;
+    width: 100%;
+}
