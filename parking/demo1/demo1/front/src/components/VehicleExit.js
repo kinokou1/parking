@@ -81,8 +81,9 @@
 //                 cost: cost.toFixed(2),
 //                 vehicle_no: vehicle_no
 //             };
-//
-//             // 将出库记录插入到数据库
+//            await api.deleteVehicle(vehicle_no);
+
+//             // 将出库记录插入到数据库，删除车库内对应车辆
 //
 //             setLicensePlate(''); // 清空车牌号
 //         } catch (error) {
